@@ -1,0 +1,24 @@
+{
+  "name": "おわかれ帳",
+  "short_name": "おわかれ帳",
+  "description": "インスタのフォロー解除と片思いがわかる",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#fff7f0",
+  "theme_color": "#fff7f0",
+  "lang": "ja",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
