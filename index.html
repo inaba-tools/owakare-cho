@@ -3,25 +3,25 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<script>(function(){var BUILD="1792884355";function check(){try{fetch("./index.html?t="+Date.now(),{cache:"no-store"}).then(function(r){return r.ok?r.text():""}).then(function(t){var m=t.match(/var BUILD="(\d+)"/);if(m&&m[1]!==BUILD){location.replace("./?v="+m[1])}}).catch(function(){})}catch(e){}}
+<script>(function(){var BUILD="1792894562";function check(){try{fetch("./index.html?t="+Date.now(),{cache:"no-store"}).then(function(r){return r.ok?r.text():""}).then(function(t){var m=t.match(/var BUILD="(\d+)"/);if(m&&m[1]!==BUILD){location.replace("./?v="+m[1])}}).catch(function(){})}catch(e){}}
 window.addEventListener("load",check);document.addEventListener("visibilitychange",function(){if(document.visibilityState==="visible")check()});})();</script>
 <meta http-equiv="Cache-Control" content="no-cache">
-<title>おわかれ帳｜インスタのフォロー解除・片思いをパスワード不要でチェック</title>
-<meta name="description" content="インスタでフォローを外した人や、フォローを返してくれない人（片思い）を一覧で確認できる無料ツール。Instagram公式のデータを読み込むだけで、パスワード入力・ログイン不要。データはスマホの外に送信されません。">
+<title>おわかれ帳｜インスタのフォロー解除・フォロバされてない人をパスワード不要でチェック</title>
+<meta name="description" content="インスタでフォローを外した人や、フォローを返してくれない人（フォロバされてない人）を一覧で確認できる無料ツール。Instagram公式のデータを読み込むだけで、パスワード入力・ログイン不要。データはスマホの外に送信されません。">
 <link rel="canonical" href="https://pipopa-lab.github.io/owakare-cho/">
 <meta name="theme-color" content="#fff7f0">
 <meta name="robots" content="index,follow">
 
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="おわかれ帳">
-<meta property="og:title" content="おわかれ帳｜インスタのフォロー解除・片思いをチェック">
-<meta property="og:description" content="フォローを外した人・片思いの人が一覧でわかる。パスワード不要、データは外部に送信しません。">
+<meta property="og:title" content="おわかれ帳｜インスタのフォロー解除・フォロバされてない人をチェック">
+<meta property="og:description" content="フォローを外した人・フォロバされてない人が一覧でわかる。パスワード不要、データは外部に送信しません。">
 <meta property="og:url" content="https://pipopa-lab.github.io/owakare-cho/">
 <meta property="og:image" content="https://pipopa-lab.github.io/owakare-cho/ogp.png">
 <meta property="og:locale" content="ja_JP">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="おわかれ帳｜インスタのフォロー解除・片思いをチェック">
-<meta name="twitter:description" content="フォローを外した人・片思いの人が一覧でわかる。パスワード不要。">
+<meta name="twitter:title" content="おわかれ帳｜インスタのフォロー解除・フォロバされてない人をチェック">
+<meta name="twitter:description" content="フォローを外した人・フォロバされてない人が一覧でわかる。パスワード不要。">
 <meta name="twitter:image" content="https://pipopa-lab.github.io/owakare-cho/ogp.png">
 
 <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
@@ -54,7 +54,7 @@ window.addEventListener("load",check);document.addEventListener("visibilitychang
   "mainEntity": [
     {"@type":"Question","name":"パスワードを入力する必要はありますか？","acceptedAnswer":{"@type":"Answer","text":"いいえ。Instagram公式の「個人情報をダウンロード」で受け取ったファイルを読み込むだけなので、パスワードやログインは不要です。"}},
     {"@type":"Question","name":"読み込んだデータはどこかに送信されますか？","acceptedAnswer":{"@type":"Answer","text":"送信されません。ファイルの読み込みと比較はすべてお使いのブラウザの中だけで行われます。"}},
-    {"@type":"Question","name":"誰がフォローを外したか分かりますか？","acceptedAnswer":{"@type":"Answer","text":"2回目以降の読み込みで、前回読み込んだときのフォロワーと比べて、いなくなった人を一覧で表示します。初回は、フォローを返していない人（片思い）を確認できます。"}}
+    {"@type":"Question","name":"誰がフォローを外したか分かりますか？","acceptedAnswer":{"@type":"Answer","text":"2回目以降の読み込みで、前回読み込んだときのフォロワーと比べて、いなくなった人を一覧で表示します。初回は、フォローを返してくれていない人（フォロバされてない人）を確認できます。"}}
   ]
 }
 </script>
@@ -190,7 +190,7 @@ footer a{color:var(--ink-soft)}
   <img src="apple-touch-icon.png" alt="" width="52" height="52">
   <div>
     <h1>おわかれ帳</h1>
-    <p class="tagline">インスタのフォロー解除と片思いがわかる</p>
+    <p class="tagline">インスタのフォロー解除とフォロバされてない人がわかる</p>
   </div>
 </header>
 
@@ -207,7 +207,7 @@ footer a{color:var(--ink-soft)}
     <li><span class="tap">エクスポートを作成</span> をタップ</li>
     <li>自分のアカウントを選んで <span class="tap">デバイスにエクスポート</span></li>
     <li><span class="tap">情報をカスタマイズ</span> で、<b>「フォロワーとフォロー中」だけ</b>にチェック</li>
-    <li>期間は <span class="tap">全期間</span>
+    <li>期間は必ず <span class="tap">全期間</span>（初期設定は「過去1年間」なので変更が必要）
       <span class="warn"><b>形式は必ず「JSON」</b>にしてください。HTMLだと読み込めません。</span></li>
     <li><span class="tap">エクスポートを開始</span> を押して完了</li>
   </ol>
@@ -228,6 +228,7 @@ footer a{color:var(--ink-soft)}
 <section class="card plain" id="result" hidden>
   <h2><span class="num">3</span>結果<span class="demo-flag" id="demoFlag" hidden>サンプル</span></h2>
   <div class="summary" id="summary"></div>
+  <p class="warn" id="rangeWarn" hidden style="margin:0 0 12px"></p>
   <div class="tabs" role="tablist" id="tabs"></div>
   <p class="tabdesc" id="tabdesc"></p>
   <input class="search" id="q" type="search" placeholder="ユーザー名でしぼりこむ" autocomplete="off" autocapitalize="off" spellcheck="false">
@@ -247,7 +248,7 @@ footer a{color:var(--ink-soft)}
   <h2>よくある質問</h2>
   <details class="faq"><summary>パスワードは必要？</summary><p>いりません。インスタ公式の「個人情報をダウンロード」で受け取ったファイルを読むだけです。ログインもしません。</p></details>
   <details class="faq"><summary>データはどこかに送られる？</summary><p>送られません。ファイルの読み込みも比較も、すべてあなたのブラウザの中だけで行います。</p></details>
-  <details class="faq"><summary>初回から「外した人」はわかる？</summary><p>初回は比べる相手がないので、「片思い（フォローを返していない人）」と「ファンだけ（自分がフォローしていない人）」がわかります。次に新しいzipを読み込むと、前回からいなくなった人が「外した人」に出ます。</p></details>
+  <details class="faq"><summary>初回から「外した人」はわかる？</summary><p>初回は比べる相手がないので、「フォロバされてない（相手が返してくれていない人）」と「フォロバしてない（自分が返していない人）」がわかります。次に新しいzipを読み込むと、前回からいなくなった人が「外した人」に出ます。</p></details>
   <details class="faq"><summary>「外した人」に出たのに、まだフォローされてる？</summary><p>ユーザー名を変えた人や、アカウントを削除・停止した人も「外した人」に出ることがあります。気になる人は、名前をタップしてプロフィールを確認してください。</p></details>
   <details class="faq"><summary>誰がプロフィールを見たかはわかる？</summary><p>わかりません。インスタはプロフィールを見た人の情報を公開しておらず、公式データにも含まれていません。</p></details>
   <details class="faq"><summary>毎回申請が必要？</summary><p>はい。インスタのデータは「申請した時点の一覧」なので、新しい状態を見るには毎回申請します。月1回くらいのチェックがおすすめです。</p></details>
@@ -364,8 +365,8 @@ function hashNames(names){
 /* ---------- compare & render ---------- */
 var TABS = [
   { id:"gone",   label:"外した人",   desc:"前回はフォロワーだったのに、今回いなくなった人です。名前を変えた人や、アカウントを消した人もここに出ることがあります。", tone:"pink" },
-  { id:"oneway", label:"片思い",     desc:"あなたはフォローしているのに、相手はフォローしていない人です。", tone:"purple" },
-  { id:"fans",   label:"ファンだけ", desc:"相手はフォローしてくれているのに、あなたはフォローしていない人です。", tone:"orange" },
+  { id:"oneway", label:"フォロバされてない", desc:"あなたはフォローしているのに、相手はフォローしていない人です。", tone:"purple" },
+  { id:"fans",   label:"フォロバしてない", desc:"相手はフォローしてくれているのに、あなたはフォローしていない人です。", tone:"orange" },
   { id:"newf",   label:"新しいフォロワー", desc:"前回はいなかった、新しくフォローしてくれた人です。", tone:"green" },
   { id:"pending",label:"申請中",     desc:"あなたがフォローリクエストを送って、まだ承認されていない人です。", tone:"purple" }
 ];
@@ -384,7 +385,10 @@ function analyze(found, prev){
   }
   ["oneway","fans","pending","newf"].forEach(function(k){ if(L[k]) L[k].sort(function(a,b){ return (b.t||0)-(a.t||0); }); });
   if(L.gone) L.gone.sort(function(a,b){ return a.u.localeCompare(b.u); });
+  var oldest = 0;
+  found.followers.concat(found.following).forEach(function(x){ if(x.t && (!oldest || x.t < oldest)) oldest = x.t; });
   return {
+    oldest: oldest,
     lists:L,
     counts:{ followers:Object.keys(fol).length, following:Object.keys(ing).length },
     names:{ followers:Object.keys(fol).map(function(k){ return fol[k].u; }), following:Object.keys(ing).map(function(k){ return ing[k].u; }) }
@@ -405,7 +409,7 @@ function render(res, prev){
   s.innerHTML =
     stat("フォロワー", res.counts.followers + "人") +
     stat("フォロー中", res.counts.following + "人") +
-    stat("片思い", L.oneway.length + "人") +
+    stat("フォロバされてない", L.oneway.length + "人") +
     stat(prev ? "外した人（" + fmtDay(prev.savedAt) + "比）" : "外した人", goneTxt);
 
   var tabs = $("tabs"); tabs.innerHTML = "";
@@ -419,6 +423,12 @@ function render(res, prev){
     b.addEventListener("click", function(){ selectTab(t.id); });
     tabs.appendChild(b);
   });
+  var w = $("rangeWarn");
+  if(res.oldest && res.oldest > Date.now()/1000 - 400*86400){
+    var d = new Date(res.oldest*1000);
+    w.innerHTML = "<b>読み込んだデータは " + d.getFullYear() + "年" + (d.getMonth()+1) + "月以降の分だけかもしれません。</b>申請のときに期間が「全期間」以外になっていると、それより前からつながっている人が入らず、フォロバされているのに「フォロバされてない」に出たり、フォロワー数が少なく出たりします。期間を「全期間」にして申請し直してください。";
+    w.hidden = false;
+  } else { w.hidden = true; }
   $("result").hidden = false;
   selectTab(L.gone ? "gone" : "oneway");
   $("result").scrollIntoView({ behavior:"smooth", block:"start" });
@@ -510,6 +520,7 @@ function demo(){
   var following = mk(pool.slice(3,18));
   var prev = { savedAt: Date.now() - 30*86400000, followers: pool.slice(0,16) };
   var res = analyze({ followers:followers, following:following, pending:mk(["secret.acc_"]) }, prev);
+  res.oldest = 0;
   state.demo = true; $("demoFlag").hidden = false;
   setStatus("サンプルを表示しています（架空のアカウントです）。");
   render(res, prev);
