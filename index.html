@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<script>(function(){var BUILD="1792894916";function check(){try{fetch("./index.html?t="+Date.now(),{cache:"no-store"}).then(function(r){return r.ok?r.text():""}).then(function(t){var m=t.match(/var BUILD="(\d+)"/);if(m&&m[1]!==BUILD){location.replace("./?v="+m[1])}}).catch(function(){})}catch(e){}}
+<script>(function(){var BUILD="1792895225";function check(){try{fetch("./index.html?t="+Date.now(),{cache:"no-store"}).then(function(r){return r.ok?r.text():""}).then(function(t){var m=t.match(/var BUILD="(\d+)"/);if(m&&m[1]!==BUILD){location.replace("./?v="+m[1])}}).catch(function(){})}catch(e){}}
 window.addEventListener("load",check);document.addEventListener("visibilitychange",function(){if(document.visibilityState==="visible")check()});})();</script>
 <meta http-equiv="Cache-Control" content="no-cache">
 <title>おわかれ帳｜インスタのフォロー解除・フォロバされていない人をパスワード不要でチェック</title>
@@ -207,6 +207,8 @@ footer a{color:var(--ink-soft)}
 <section class="card" id="step1">
   <h2><span class="num">1</span>インスタでデータを申請</h2>
   <a class="btn primary" href="https://accountscenter.instagram.com/info_and_permissions/dyi/" target="_blank" rel="noopener">申請画面をひらく ↗</a>
+  <button class="btn ghost" id="copyUrl" type="button" style="margin-top:8px">インスタのアプリが開いてしまうときは：URLをコピー</button>
+  <p class="note" id="copyNote" hidden>コピーしました。Safariの上のアドレスバーに貼り付けて開いてください（貼り付けて開くとアプリに飛ばされません）。</p>
   <ol class="guide">
     <li><span class="tap">エクスポートを作成</span> をタップ</li>
     <li>自分のアカウントを選んで <span class="tap">デバイスにエクスポート</span></li>
@@ -254,6 +256,7 @@ footer a{color:var(--ink-soft)}
   <details class="faq"><summary>初回から「外した人」はわかる？</summary><p>初回は比べる相手がないので、「フォロバされていない（相手が返してくれていない人）」と「フォローされている（自分が返していない人）」がわかります。次に新しいzipを読み込むと、前回からいなくなった人が「外した人」に出ます。</p></details>
   <details class="faq"><summary>「外した人」に出たのに、まだフォローされてる？</summary><p>ユーザー名を変えた人や、アカウントを削除・停止した人も「外した人」に出ることがあります。気になる人は、名前をタップしてプロフィールを確認してください。</p></details>
   <details class="faq"><summary>誰がプロフィールを見たかはわかる？</summary><p>わかりません。インスタはプロフィールを見た人の情報を公開しておらず、公式データにも含まれていません。</p></details>
+  <details class="faq"><summary>「申請画面をひらく」でインスタのアプリが開いてしまう</summary><p>インスタのアプリが入っていると、iPhoneが自動でアプリに切り替えることがあります。「URLをコピー」を押して、Safariのアドレスバーに貼り付けて開いてください。アプリが開いたときに画面の右上に出る「instagram.com ›」を押すと、次からSafariで開くようになることもあります。</p></details>
   <details class="faq"><summary>毎回申請が必要？</summary><p>はい。インスタのデータは「申請した時点の一覧」なので、新しい状態を見るには毎回申請します。月1回くらいのチェックがおすすめです。</p></details>
 </section>
 
@@ -532,6 +535,20 @@ drop.addEventListener("drop", function(e){ handle(e.dataTransfer.files); });
 $("q").addEventListener("input", function(){ state.shown = PAGE; drawList(); });
 $("moreBtn").addEventListener("click", function(){ state.shown += PAGE; drawList(); });
 $("demoBtn").addEventListener("click", demo);
+$("copyUrl").addEventListener("click", function(){
+  var u = "https://accountscenter.instagram.com/info_and_permissions/dyi/";
+  function done(){ $("copyNote").hidden = false; }
+  try{
+    if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(u).then(done, fallback); }
+    else fallback();
+  }catch(e){ fallback(); }
+  function fallback(){
+    var t = document.createElement("textarea"); t.value = u; t.setAttribute("readonly",""); t.style.position="fixed"; t.style.opacity="0";
+    document.body.appendChild(t); t.select(); t.setSelectionRange(0, u.length);
+    try{ document.execCommand("copy"); }catch(e){}
+    document.body.removeChild(t); done();
+  }
+});
 $("clearBtn").addEventListener("click", function(){
   if(!confirm("保存した前回の一覧を消しますか？")) return;
   try{ localStorage.removeItem(STORE_KEY); }catch(e){}
