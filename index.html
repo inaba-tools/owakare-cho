@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<script>(function(){var BUILD="1792895454";function check(){try{fetch("./index.html?t="+Date.now(),{cache:"no-store"}).then(function(r){return r.ok?r.text():""}).then(function(t){var m=t.match(/var BUILD="(\d+)"/);if(m&&m[1]!==BUILD){location.replace("./?v="+m[1])}}).catch(function(){})}catch(e){}}
+<script>(function(){var BUILD="1792895576";function check(){try{fetch("./index.html?t="+Date.now(),{cache:"no-store"}).then(function(r){return r.ok?r.text():""}).then(function(t){var m=t.match(/var BUILD="(\d+)"/);if(m&&m[1]!==BUILD){location.replace("./?v="+m[1])}}).catch(function(){})}catch(e){}}
 window.addEventListener("load",check);document.addEventListener("visibilitychange",function(){if(document.visibilityState==="visible")check()});})();</script>
 <meta http-equiv="Cache-Control" content="no-cache">
 <title>おわかれ帳｜インスタのフォロー解除・フォロバされていない人をパスワード不要でチェック</title>
@@ -143,6 +143,16 @@ ol.guide li::before{content:counter(g);position:absolute;left:0;top:9px;width:24
 .status{margin:10px 0 0;font-size:14px;min-height:1.4em}
 .status.err{color:var(--ink);font-weight:500;font-size:14px}
 .status.err b{color:#d23b5a}
+.checks{list-style:none;margin:10px 0 0;padding:0;border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.checks li{display:flex;gap:10px;padding:10px 12px;font-size:14px;border-top:1px solid var(--line);align-items:flex-start}
+.checks li:first-child{border-top:0}
+.checks .ic{flex:none;width:22px;height:22px;border-radius:50%;display:grid;place-items:center;color:#fff;font-size:13px;font-weight:800;margin-top:1px}
+.checks .ok .ic{background:var(--green)}
+.checks .ng .ic{background:#d23b5a}
+.checks .maybe .ic{background:var(--orange)}
+.checks .t{font-weight:700}
+.checks .m{color:var(--ink-soft);font-size:13px;line-height:1.6}
+.checks .ng .m{color:var(--ink)}
 
 .summary{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin:0 0 12px}
 .stat{background:var(--bg);border-radius:12px;padding:10px 12px;border:2px solid transparent;text-align:left;font:inherit;color:inherit;cursor:pointer;position:relative}
@@ -229,13 +239,13 @@ footer a{color:var(--ink-soft)}
     <span>ダウンロードしたzipをそのまま選んでください</span>
   </label>
   <p class="status" id="status" role="status"></p>
+  <ul class="checks" id="checks" hidden></ul>
   <button class="btn ghost small" id="demoBtn" type="button" style="margin-top:6px">サンプルで試してみる</button>
 </section>
 
 <section class="card plain" id="result" hidden>
   <h2><span class="num">3</span>結果<span class="demo-flag" id="demoFlag" hidden>サンプル</span></h2>
   <div class="summary" id="summary"></div>
-  <p class="warn" id="rangeWarn" hidden style="margin:0 0 12px"></p>
   <p class="tabdesc" id="tabdesc"></p>
   <input class="search" id="q" type="search" placeholder="ユーザー名でしぼりこむ" autocomplete="off" autocapitalize="off" spellcheck="false">
   <ul class="people" id="list"></ul>
@@ -359,7 +369,48 @@ function readFiles(files){
   return Promise.all(tasks).then(function(){ return found; });
 }
 function addJson(found, k, txt){
-  try{ var j = JSON.parse(txt); found[k] = found[k].concat(entriesFrom(j)); }catch(e){ found.badJson = true; }
+  try{ var j = JSON.parse(txt); found[k] = found[k].concat(entriesFrom(j)); found["has_"+k] = true; }catch(e){ found.badJson = true; }
+}
+function checksOf(found){
+  var rows = [], block = false, blockMsg = "";
+  var isJson = !found.html && !found.other.length && !found.badZip && (found.has_followers || found.has_following || found.zipJson > 0 || found.otherJson.length > 0);
+  var notJsonMsg = found.html ? "HTML形式になっています。形式を「JSON」にして申請し直してください。"
+    : found.other.length ? "選んだファイル（" + esc(found.other.join("、")) + "）はJSON形式ではありません。"
+    : found.badZip ? "zipファイルを開けませんでした。ダウンロードし直してください。"
+    : "JSONのファイルが見つかりませんでした。";
+  rows.push(isJson ? { s:"ok", t:"フォーマット：JSON", m:"OK" } : { s:"ng", t:"フォーマット：JSON", m:notJsonMsg });
+  if(!isJson){ block = true; }
+  var hasF = !!found.has_followers, hasG = !!found.has_following;
+  if(hasF && hasG){
+    rows.push({ s:"ok", t:"情報：フォロワーとフォロー中", m:"OK" });
+  }else if(isJson){
+    var miss = !hasF && !hasG ? "フォロワーとフォロー中のデータ" : !hasF ? "フォロワーのデータ" : "フォロー中のデータ";
+    rows.push({ s:"ng", t:"情報：フォロワーとフォロー中", m: miss + "が入っていません。「情報をカスタマイズ」で「フォロワーとフォロー中」にチェックを入れて申請し直してください。" });
+    block = true;
+  }else{
+    rows.push({ s:"maybe", t:"情報：フォロワーとフォロー中", m:"形式がJSONではないため確認できません。" });
+  }
+  var oldest = 0;
+  found.followers.concat(found.following).forEach(function(x){ if(x.t && (!oldest || x.t < oldest)) oldest = x.t; });
+  if(!hasF && !hasG){
+    rows.push({ s:"maybe", t:"期間：全期間", m:"データが読めないため確認できません。" });
+  }else if(oldest && oldest > Date.now()/1000 - 400*86400){
+    var d = new Date(oldest*1000);
+    rows.push({ s:"ng", t:"期間：全期間", m:"いちばん古いデータが " + d.getFullYear() + "年" + (d.getMonth()+1) + "月なので、期間が「過去1年間」などになっているかもしれません。このままだと、昔からの相互フォローの人が「フォロバされていない」に出たり、フォロワー数が少なく出たりします。期間を「全期間」にして申請し直してください（アカウントを作って1年たっていない場合は、このままで大丈夫です）。" });
+  }else{
+    rows.push({ s:"ok", t:"期間：全期間", m:"OK" });
+  }
+  if(block && !blockMsg) blockMsg = "<b>このファイルは読み込めませんでした。</b>下のチェックで「！」になっている項目を直して、申請し直してください。";
+  return { rows:rows, block:block, blockMsg:blockMsg };
+}
+function showChecks(chk){
+  var ul = $("checks"); ul.innerHTML = "";
+  chk.rows.forEach(function(r){
+    var li = document.createElement("li"); li.className = r.s;
+    li.innerHTML = '<span class="ic">' + (r.s === "ok" ? "✓" : r.s === "ng" ? "!" : "?") + '</span><div><div class="t">' + esc(r.t) + '</div><div class="m">' + r.m + '</div></div>';
+    ul.appendChild(li);
+  });
+  ul.hidden = false;
 }
 function problemOf(found){
   if(found.html && !found.followers.length && !found.following.length)
@@ -443,12 +494,6 @@ function render(res, prev){
     b.addEventListener("click", function(){ selectTab(t.id); $("tabdesc").scrollIntoView({behavior:"smooth", block:"start"}); });
     s.appendChild(b);
   });
-  var w = $("rangeWarn");
-  if(res.oldest && res.oldest > Date.now()/1000 - 400*86400){
-    var d = new Date(res.oldest*1000);
-    w.innerHTML = "<b>読み込んだデータは " + d.getFullYear() + "年" + (d.getMonth()+1) + "月以降の分だけかもしれません。</b>申請のときに期間が「全期間」以外になっていると、それより前からつながっている人が入らず、フォロバされているのに「フォロバされていない」に出たり、フォロワー数が少なく出たりします。期間を「全期間」にして申請し直してください。";
-    w.hidden = false;
-  } else { w.hidden = true; }
   $("result").hidden = false;
   selectTab(L.gone ? "gone" : "oneway");
   $("result").scrollIntoView({ behavior:"smooth", block:"start" });
@@ -503,9 +548,11 @@ function handle(files){
   state.demo = false; $("demoFlag").hidden = true;
   setStatus("読み込み中…");
   readFiles(files).then(function(found){
-    if(!found.followers.length && !found.following.length){
+    var chk = checksOf(found);
+    showChecks(chk);
+    if(chk.block){
       $("result").hidden = true;
-      return setStatus(problemOf(found), true);
+      return setStatus(chk.blockMsg || problemOf(found), true);
     }
     var snaps = loadSnaps();
     var tmpNames = uniqMap(found.followers);
@@ -515,7 +562,10 @@ function handle(files){
     for(var i = snaps.length-1; i >= 0; i--){ if(snaps[i].hash !== hash){ prev = snaps[i]; break; } }
     var res = analyze(found, prev);
     var already = snaps.length && snaps[snaps.length-1].hash === hash;
-    if(!already){
+    var partial = chk.rows.some(function(r){ return r.s === "ng"; });
+    if(partial){
+      setStatus("<b>読み込みましたが、注意があります。</b>下のチェックを確認してください。期間が足りない可能性があるので、今回の一覧は「前回の記録」として保存していません。", true);
+    }else if(!already){
       snaps.push({ savedAt:Date.now(), hash:hash, followers:res.names.followers, following:res.names.following });
       var ok = saveSnaps(snaps);
       setStatus(ok ? "読み込みました。今回の一覧を保存しました。" : "読み込みました（この端末では記録を保存できませんでした）。");
@@ -540,7 +590,7 @@ function demo(){
   var prev = { savedAt: Date.now() - 30*86400000, followers: pool.slice(0,16) };
   var res = analyze({ followers:followers, following:following, pending:mk(["secret.acc_"]) }, prev);
   res.oldest = 0;
-  state.demo = true; $("demoFlag").hidden = false;
+  state.demo = true; $("demoFlag").hidden = false; $("checks").hidden = true;
   setStatus("サンプルを表示しています（架空のアカウントです）。");
   render(res, prev);
 }
