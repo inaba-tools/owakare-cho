@@ -1,7 +1,7 @@
 {
   "name": "おわかれ帳",
   "short_name": "おわかれ帳",
-  "description": "インスタのフォロー解除と片思いがわかる",
+  "description": "インスタのフォロー解除とフォロバされていない人がわかる",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
