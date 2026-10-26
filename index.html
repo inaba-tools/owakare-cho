@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<script>(function(){var BUILD="1792978792";function check(){try{fetch("./index.html?t="+Date.now(),{cache:"no-store"}).then(function(r){return r.ok?r.text():""}).then(function(t){var m=t.match(/var BUILD="(\d+)"/);if(m&&m[1]!==BUILD){location.replace("./?v="+m[1])}}).catch(function(){})}catch(e){}}
+<script>(function(){var BUILD="1792978917";function check(){try{fetch("./index.html?t="+Date.now(),{cache:"no-store"}).then(function(r){return r.ok?r.text():""}).then(function(t){var m=t.match(/var BUILD="(\d+)"/);if(m&&m[1]!==BUILD){location.replace("./?v="+m[1])}}).catch(function(){})}catch(e){}}
 window.addEventListener("load",check);document.addEventListener("visibilitychange",function(){if(document.visibilityState==="visible")check()});})();</script>
 <meta http-equiv="Cache-Control" content="no-cache">
 <title>おわかれ帳｜インスタのフォロー解除・フォロバされていない人をパスワード不要でチェック</title>
@@ -166,6 +166,21 @@ details.how>summary::before{content:"▸ "}
 details.how[open]>summary::before{content:"▾ "}
 .row-btns{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
 .row-btns .btn{cursor:pointer}
+.howto{display:flex;align-items:stretch;gap:4px;margin:0 0 16px}
+.hstep{flex:1;background:var(--paper);border-radius:16px;box-shadow:var(--shadow);padding:10px 10px 12px;text-align:center;min-width:0}
+.cal{display:inline-block;border-radius:8px;overflow:hidden;border:1.5px solid var(--line);font-size:12px;min-width:64px;margin-bottom:8px}
+.cal::before{content:"";display:block;height:7px;background:var(--grad)}
+.cal b{display:block;padding:3px 8px}
+.mini{display:flex;flex-direction:column;gap:4px;text-align:left}
+.mi{display:flex;align-items:center;gap:6px;font-size:12px;background:var(--bg);border-radius:8px;padding:4px 6px;position:relative;white-space:nowrap;overflow:hidden}
+.mi i{width:14px;height:14px;border-radius:50%;flex:none}
+.mi.gone{background:var(--soft-pink);color:var(--ink-soft)}
+.mi s{overflow:hidden;text-overflow:ellipsis}
+.mi.gone em{margin-left:auto;flex:none;font-style:normal;font-size:10.5px;font-weight:800;color:#fff;background:var(--pink);border-radius:999px;padding:0 6px}
+.hcap{font-size:12px;word-break:keep-all;overflow-wrap:anywhere;font-weight:700;margin-top:8px;line-height:1.5}
+.hcap b{color:var(--pink)}
+.harrow{flex:none;display:flex;flex-direction:column;justify-content:center;align-items:center;font-size:20px;color:var(--pink);font-weight:800}
+.harrow span{font-size:10.5px;color:var(--ink-soft);font-weight:700}
 ol.guide{list-style:none;margin:14px 0 4px;padding:0;counter-reset:g}
 ol.guide li{counter-increment:g;position:relative;padding:8px 0 8px 34px;font-size:15px;border-bottom:1px dashed var(--line)}
 ol.guide li:last-child{border-bottom:0}
@@ -251,6 +266,28 @@ footer a{color:var(--ink-soft)}
   </div>
 </header>
 
+
+<section class="howto" aria-label="使い方">
+  <div class="hstep">
+    <div class="cal"><b>今日</b></div>
+    <div class="mini">
+      <div class="mi"><i style="background:#e8457a"></i>sakura</div>
+      <div class="mi"><i style="background:#f59a3c"></i>haru</div>
+      <div class="mi"><i style="background:#8b5cf6"></i>momo</div>
+    </div>
+    <div class="hcap">まず1回<br>読み込む</div>
+  </div>
+  <div class="harrow">→</div>
+  <div class="hstep">
+    <div class="cal"><b>1ヶ月後</b></div>
+    <div class="mini">
+      <div class="mi"><i style="background:#e8457a"></i>sakura</div>
+      <div class="mi gone"><i style="background:#f59a3c"></i><s>haru</s><em>外した</em></div>
+      <div class="mi"><i style="background:#8b5cf6"></i>momo</div>
+    </div>
+    <div class="hcap">もう1回読み込むと<br><b>外した人</b>がわかる</div>
+  </div>
+</section>
 
 <section class="card" id="step1">
   <h2><span class="num">1</span>インスタでデータを申請</h2>
