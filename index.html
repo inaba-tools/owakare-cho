@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<script>(function(){var BUILD="1792898820";function check(){try{fetch("./index.html?t="+Date.now(),{cache:"no-store"}).then(function(r){return r.ok?r.text():""}).then(function(t){var m=t.match(/var BUILD="(\d+)"/);if(m&&m[1]!==BUILD){location.replace("./?v="+m[1])}}).catch(function(){})}catch(e){}}
+<script>(function(){var BUILD="1792978310";function check(){try{fetch("./index.html?t="+Date.now(),{cache:"no-store"}).then(function(r){return r.ok?r.text():""}).then(function(t){var m=t.match(/var BUILD="(\d+)"/);if(m&&m[1]!==BUILD){location.replace("./?v="+m[1])}}).catch(function(){})}catch(e){}}
 window.addEventListener("load",check);document.addEventListener("visibilitychange",function(){if(document.visibilityState==="visible")check()});})();</script>
 <meta http-equiv="Cache-Control" content="no-cache">
 <title>おわかれ帳｜インスタのフォロー解除・フォロバされていない人をパスワード不要でチェック</title>
@@ -314,7 +314,12 @@ footer a{color:var(--ink-soft)}
     <div id="savedText"></div>
     <button class="btn ghost small" id="clearBtn" type="button">記録を消す</button>
   </div>
-  <p class="note">前回の一覧はこの端末のブラウザの中にだけ保存されます。次回、新しいzipを読み込むと「外した人」がわかります。</p>
+  <p class="note">記録はこの端末のブラウザの中にだけ保存されます。外した人の履歴は、読み込むたびに追加されてずっと残ります。</p>
+  <span class="warn"><b>iPhoneのSafariでは、7日以上開かないと記録が消えることがあります。</b>共有ボタンから「ホーム画面に追加」して使うと消えにくくなります。念のため、ときどき下のボタンで記録をファイルに保存しておくと安心です。</span>
+  <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap">
+    <button class="btn ghost small" id="backupBtn" type="button">記録をファイルに保存</button>
+    <label class="btn ghost small" style="cursor:pointer">記録ファイルを読み込む<input type="file" id="restoreFile" accept=".json,application/json" hidden></label>
+  </div>
 </section>
 
 <section class="card plain" id="about">
@@ -333,6 +338,7 @@ footer a{color:var(--ink-soft)}
   <h2>よくある質問</h2>
   <details class="faq"><summary>パスワードは必要？</summary><p>いりません。インスタ公式の「個人情報をダウンロード」で受け取ったファイルを読むだけです。ログインもしません。</p></details>
   <details class="faq"><summary>データはどこかに送られる？</summary><p>送られません。ファイルの読み込みも比較も、すべてあなたのブラウザの中だけで行います。</p></details>
+  <details class="faq"><summary>外した人の記録はずっと見られる？</summary><p>はい。読み込むたびに、前回からいなくなった人を「外した人」の履歴に追加していくので、過去に外した人もいつ外したか（○月○日〜○月○日のあいだ）と一緒にずっと見られます。記録はこの端末にだけ保存されるので、機種変更のときは「記録をファイルに保存」で引き継いでください。</p></details>
   <details class="faq"><summary>初回から「外した人」はわかる？</summary><p>初回は比べる相手がないので、「フォロバされていない（相手が返してくれていない人）」と「フォローされている（自分が返していない人）」がわかります。次に新しいzipを読み込むと、前回からいなくなった人が「外した人」に出ます。</p></details>
   <details class="faq"><summary>「外した人」に出たのに、まだフォローされてる？</summary><p>ユーザー名を変えた人や、アカウントを削除・停止した人も「外した人」に出ることがあります。気になる人は、名前をタップしてプロフィールを確認してください。</p></details>
   <details class="faq"><summary>誰がプロフィールを見たかはわかる？</summary><p>わかりません。インスタはプロフィールを見た人の情報を公開しておらず、公式データにも含まれていません。</p></details>
@@ -371,6 +377,13 @@ var state = { tab:null, lists:{}, shown:PAGE, demo:false };
 /* ---------- storage (safe) ---------- */
 function loadSnaps(){
   try{ var r = localStorage.getItem(STORE_KEY); return r ? JSON.parse(r) : []; }catch(e){ return []; }
+}
+var LOG_KEY = "owakare.history.v1";
+function loadLog(){
+  try{ var r = localStorage.getItem(LOG_KEY); return r ? JSON.parse(r) : []; }catch(e){ return []; }
+}
+function saveLog(arr){
+  try{ localStorage.setItem(LOG_KEY, JSON.stringify(arr)); return true; }catch(e){ return false; }
 }
 function saveSnaps(arr){
   try{ localStorage.setItem(STORE_KEY, JSON.stringify(arr.slice(-5))); return true; }catch(e){ return false; }
@@ -512,9 +525,9 @@ var TABS = [
   { id:"followers", label:"フォロワー", desc:"あなたをフォローしている人です。" },
   { id:"following", label:"フォロー中", desc:"あなたがフォローしている人です。" },
   { id:"oneway", label:"フォロバされていない", desc:"あなたはフォローしているのに、相手はフォローしていない人です。" },
-  { id:"gone",   label:"外した人", desc:"前回はフォロワーだったのに、今回いなくなった人です。名前を変えた人や、アカウントを消した人もここに出ることがあります。" },
+  { id:"gone",   label:"外した人", desc:"これまでの記録の中で、フォローを外した人の一覧です。読み込むたびに追加され、記録はずっと残ります（新しい順）。名前を変えた人や、アカウントを消した人もここに出ることがあります。" },
   { id:"fans",   label:"フォローされている", desc:"相手はフォローしてくれているけど、あなたはフォローしていない人です。" },
-  { id:"newf",   label:"新しいフォロワー", desc:"前回はいなかった、新しくフォローしてくれた人です。" },
+  { id:"newf",   label:"新しいフォロワー", desc:"これまでの記録の中で、新しくフォローしてくれた人の一覧です（新しい順）。" },
   { id:"pending",label:"申請中", desc:"あなたがフォローリクエストを送って、まだ承認されていない人です。" }
 ];
 
@@ -545,6 +558,7 @@ function analyze(found, prev){
 var COLORS = ["#e8457a","#f59a3c","#8b5cf6","#2f9e6a","#d9488f","#e07b39","#6d5bd0","#c2410c"];
 function colorFor(u){ var h=0; for(var i=0;i<u.length;i++) h=(h*17+u.charCodeAt(i))|0; return COLORS[Math.abs(h)%COLORS.length]; }
 function fmtDate(t){ if(!t) return ""; var d=new Date(t*1000); return d.getFullYear()+"/"+(d.getMonth()+1)+"/"+d.getDate(); }
+function fmtYMD(ms){ var d=new Date(ms); return d.getFullYear()+"年"+(d.getMonth()+1)+"月"+d.getDate()+"日"; }
 function fmtDay(ms){ var d=new Date(ms); return (d.getMonth()+1)+"月"+d.getDate()+"日"; }
 function esc(s){ return String(s).replace(/[&<>"']/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]; }); }
 
@@ -589,6 +603,8 @@ function drawList(){
   items.slice(0, state.shown).forEach(function(x){
     var li = document.createElement("li");
     var d = x.t ? ((id === "oneway" || id === "following") ? "フォローした日 " : id === "pending" ? "申請した日 " : "フォローされた日 ") + fmtDate(x.t) : "";
+    if(id === "gone" && x.to){ d = fmtDay(x.from) + "〜" + fmtDay(x.to) + "のあいだに外した" + (x.back ? "（今はまたフォローしてくれています）" : ""); }
+    if(id === "newf" && x.to){ d = fmtDay(x.from) + "〜" + fmtDay(x.to) + "のあいだにフォローしてくれた"; }
     var link = state.demo ? "#" : "https://www.instagram.com/" + encodeURIComponent(x.u) + "/";
     li.innerHTML = '<a href="'+link+'"'+(state.demo?'':' target="_blank" rel="noopener"')+'>' +
       '<span class="av" style="background:'+colorFor(x.u)+'">'+esc(x.u.replace(/^[._]+/,"").charAt(0) || "?")+'</span>' +
@@ -603,11 +619,28 @@ function drawList(){
   }
 }
 
+function applyHistory(res, found){
+  var log = loadLog();
+  if(!log.length) return;
+  var cur = uniqMap(found.followers);
+  function build(type){
+    var seen = {}, out = [];
+    log.filter(function(e){ return e.type === type; }).sort(function(a,b){ return b.to - a.to; }).forEach(function(e){
+      var k = e.u.toLowerCase(); if(seen[k]) return; seen[k] = 1;
+      out.push({ u:e.u, t:e.t||0, from:e.from, to:e.to, back: type === "gone" && !!cur[k] });
+    });
+    return out;
+  }
+  res.lists.gone = build("gone");
+  res.lists.newf = build("new");
+  res.hist = true;
+}
 function showSaved(){
   var snaps = loadSnaps();
-  if(!snaps.length){ $("savedCard").hidden = true; return; }
+  if(!snaps.length){ $("savedText").innerHTML = "まだ記録はありません。<br><span style=\"font-size:12.5px;color:var(--ink-soft)\">機種変更などで記録ファイルがある場合は、下から読み込めます。</span>"; $("savedCard").hidden = false; return; }
   var last = snaps[snaps.length-1];
-  $("savedText").innerHTML = "前回の記録：<b>" + fmtDay(last.savedAt) + "</b>（フォロワー " + last.followers.length + "人）";
+  var log = loadLog(), first = snaps[0];
+  $("savedText").innerHTML = "前回の記録：<b>" + fmtDay(last.savedAt) + "</b>（フォロワー " + last.followers.length + "人）<br><span style=\"font-size:12.5px;color:var(--ink-soft)\">" + fmtYMD(first.savedAt) + "から記録中・外した人の履歴 " + log.filter(function(e){ return e.type === "gone"; }).length + "件</span>";
   $("savedCard").hidden = false;
 }
 
@@ -635,12 +668,20 @@ function handle(files){
     if(partial){
       setStatus("<b>読み込みましたが、注意があります。</b>下のチェックを確認してください。期間が足りない可能性があるので、今回の一覧は「前回の記録」として保存していません。", true);
     }else if(!already){
-      snaps.push({ savedAt:Date.now(), hash:hash, followers:res.names.followers, following:res.names.following });
+      var nowAt = Date.now();
+      snaps.push({ savedAt:nowAt, hash:hash, followers:res.names.followers, following:res.names.following });
       var ok = saveSnaps(snaps);
+      if(prev && res.lists.gone){
+        var log = loadLog();
+        res.lists.gone.forEach(function(x){ log.push({ type:"gone", u:x.u, from:prev.savedAt, to:nowAt }); });
+        (res.lists.newf || []).forEach(function(x){ log.push({ type:"new", u:x.u, from:prev.savedAt, to:nowAt, t:x.t||0 }); });
+        saveLog(log);
+      }
       setStatus(ok ? "読み込みました。今回の一覧を保存しました。" : "読み込みました（この端末では記録を保存できませんでした）。");
     }else{
       setStatus("読み込みました（前回と同じファイルです）。");
     }
+    applyHistory(res, found);
     render(res, prev);
     showSaved();
   }).catch(function(){
@@ -659,6 +700,10 @@ function demo(){
   var prev = { savedAt: Date.now() - 30*86400000, followers: pool.slice(0,16) };
   var res = analyze({ followers:followers, following:following, pending:mk(["secret.acc_"]) }, prev);
   res.oldest = 0;
+  var n0 = Date.now();
+  res.lists.gone = res.lists.gone.map(function(x){ return { u:x.u, t:0, from:prev.savedAt, to:n0 }; })
+    .concat([{ u:"old_friend_2025", t:0, from:n0-90*86400000, to:n0-60*86400000 }, { u:"umi.no.oto", t:0, from:n0-60*86400000, to:n0-30*86400000, back:true }]);
+  res.lists.newf = res.lists.newf.map(function(x){ return { u:x.u, t:x.t, from:prev.savedAt, to:n0 }; });
   state.demo = true; $("demoFlag").hidden = false; $("checks").hidden = true;
   setStatus("サンプルを表示しています（架空のアカウントです）。");
   render(res, prev);
@@ -687,9 +732,33 @@ $("copyUrl").addEventListener("click", function(){
     document.body.removeChild(t); done();
   }
 });
+$("backupBtn").addEventListener("click", function(){
+  var data = { app:"owakare-cho", version:1, exportedAt:Date.now(), snapshots:loadSnaps(), history:loadLog() };
+  var blob = new Blob([JSON.stringify(data)], { type:"application/json" });
+  var d = new Date(), name = "owakare-kiroku-" + d.getFullYear() + ("0"+(d.getMonth()+1)).slice(-2) + ("0"+d.getDate()).slice(-2) + ".json";
+  var a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = name;
+  document.body.appendChild(a); a.click(); setTimeout(function(){ URL.revokeObjectURL(a.href); a.remove(); }, 1000);
+  setStatus("記録ファイル（" + name + "）を保存しました。ファイルアプリに残しておいてください。");
+});
+$("restoreFile").addEventListener("change", function(e){
+  var f = e.target.files && e.target.files[0]; e.target.value = "";
+  if(!f) return;
+  f.text().then(function(t){
+    var d = JSON.parse(t);
+    if(!d || d.app !== "owakare-cho" || !Array.isArray(d.snapshots)) throw 0;
+    // merge: keep everything, newest wins on duplicates
+    var snaps = loadSnaps().concat(d.snapshots), seen = {}, ms = [];
+    snaps.sort(function(a,b){ return a.savedAt - b.savedAt; }).forEach(function(x){ if(!seen[x.savedAt]){ seen[x.savedAt]=1; ms.push(x); } });
+    saveSnaps(ms);
+    var log = loadLog().concat(d.history || []), seen2 = {}, ml = [];
+    log.forEach(function(x){ var k = x.type+"|"+x.u+"|"+x.to; if(!seen2[k]){ seen2[k]=1; ml.push(x); } });
+    saveLog(ml);
+    showSaved(); setStatus("記録ファイルを読み込みました。次にzipを読み込むと、これまでの履歴もあわせて表示されます。");
+  }).catch(function(){ setStatus("<b>記録ファイルを読み込めませんでした。</b>「記録をファイルに保存」で作ったファイルを選んでください。", true); });
+});
 $("clearBtn").addEventListener("click", function(){
-  if(!confirm("保存した前回の一覧を消しますか？")) return;
-  try{ localStorage.removeItem(STORE_KEY); }catch(e){}
+  if(!confirm("保存した記録（前回の一覧と、外した人の履歴）をすべて消しますか？")) return;
+  try{ localStorage.removeItem(STORE_KEY); localStorage.removeItem(LOG_KEY); }catch(e){}
   showSaved(); setStatus("記録を消しました。");
 });
 showSaved();
