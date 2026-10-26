@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<script>(function(){var BUILD="1792978310";function check(){try{fetch("./index.html?t="+Date.now(),{cache:"no-store"}).then(function(r){return r.ok?r.text():""}).then(function(t){var m=t.match(/var BUILD="(\d+)"/);if(m&&m[1]!==BUILD){location.replace("./?v="+m[1])}}).catch(function(){})}catch(e){}}
+<script>(function(){var BUILD="1792978582";function check(){try{fetch("./index.html?t="+Date.now(),{cache:"no-store"}).then(function(r){return r.ok?r.text():""}).then(function(t){var m=t.match(/var BUILD="(\d+)"/);if(m&&m[1]!==BUILD){location.replace("./?v="+m[1])}}).catch(function(){})}catch(e){}}
 window.addEventListener("load",check);document.addEventListener("visibilitychange",function(){if(document.visibilityState==="visible")check()});})();</script>
 <meta http-equiv="Cache-Control" content="no-cache">
 <title>おわかれ帳｜インスタのフォロー解除・フォロバされていない人をパスワード不要でチェック</title>
@@ -153,6 +153,19 @@ h1{font-size:28px;line-height:1.2;margin:0;font-weight:800;letter-spacing:.02em}
 .mbtn.small{width:90px;margin-left:auto;padding:6px}
 .finger{position:absolute;right:-6px;bottom:-14px;width:28px;height:28px;font-style:normal}
 .finger::before{content:"👆";font-size:24px;line-height:1;filter:drop-shadow(0 2px 2px rgba(0,0,0,.25))}
+.intro{display:flex;flex-direction:column;gap:6px;margin:0 0 16px;font-size:14.5px;font-weight:700}
+.intro .when,.fstep .when{display:inline-block;min-width:58px;text-align:center;font-size:12px;font-weight:800;color:#fff;background:var(--grad);border-radius:999px;padding:2px 8px;margin-right:8px}
+.link{display:block;margin:10px auto 0;background:none;border:0;font:inherit;font-size:13.5px;color:var(--ink-soft);text-decoration:underline;cursor:pointer;padding:4px}
+.must{display:grid;gap:6px;margin:14px 0 4px}
+.must div{display:flex;align-items:center;gap:10px;background:var(--soft-pink);border-radius:10px;padding:8px 12px;font-weight:700;font-size:14.5px}
+.must span{flex:none;width:40px;font-size:12px;color:var(--pink);font-weight:800}
+details.how{margin-top:10px}
+details.how>summary{cursor:pointer;font-weight:700;font-size:14px;color:var(--purple);list-style:none;padding:6px 0}
+details.how>summary::-webkit-details-marker{display:none}
+details.how>summary::before{content:"▸ "}
+details.how[open]>summary::before{content:"▾ "}
+.row-btns{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.row-btns .btn{cursor:pointer}
 ol.guide{list-style:none;margin:14px 0 4px;padding:0;counter-reset:g}
 ol.guide li{counter-increment:g;position:relative;padding:8px 0 8px 34px;font-size:15px;border-bottom:1px dashed var(--line)}
 ol.guide li:last-child{border-bottom:0}
@@ -234,39 +247,26 @@ footer a{color:var(--ink-soft)}
   <img src="apple-touch-icon.png" alt="" width="52" height="52">
   <div>
     <h1>おわかれ帳</h1>
-    <p class="tagline">インスタのフォロー解除とフォロバされていない人がわかる</p>
+    <p class="tagline">インスタでフォローを外した人・フォロバされていない人がわかる。パスワード不要・無料</p>
   </div>
 </header>
 
-<div class="badges">
-  <span class="badge"><b>パスワード不要</b></span>
-  <span class="badge"><b>データは外に送信しない</b></span>
-  <span class="badge">無料</span>
+<div class="intro">
+  <div><span class="when">1回目</span>フォロバされていない人がわかる</div>
+  <div><span class="when">2回目〜</span>外した人がわかる（ずっと記録）</div>
 </div>
-
-<section class="card plain" id="what">
-  <h2>おわかれ帳でできること</h2>
-  <div class="flow">
-    <div class="fstep">
-      <div class="when">1回目（今日）</div>
-      <div class="what">インスタのデータを読み込むと、すぐにわかる</div>
-      <ul><li><b>フォロバされていない人</b>（自分だけがフォローしている）</li><li><b>フォローされている人</b>（自分がフォロー返ししていない）</li></ul>
-    </div>
-    <div class="farrow">↓ 今回の一覧をこの端末に保存</div>
-    <div class="fstep">
-      <div class="when">2回目（1ヶ月後くらい）</div>
-      <div class="what">もう一度新しいデータを読み込むと、前回と比べてわかる</div>
-      <ul><li><b>フォローを外した人</b></li><li><b>新しくフォローしてくれた人</b></li></ul>
-    </div>
-  </div>
-  <p class="note">パスワードもログインも不要。データはこの端末の外に送信されません。</p>
-</section>
 
 <section class="card" id="step1">
   <h2><span class="num">1</span>インスタでデータを申請</h2>
   <a class="btn primary" href="https://accountscenter.instagram.com/info_and_permissions/dyi/" target="_blank" rel="noopener">申請画面をひらく ↗</a>
-  <button class="btn ghost" id="copyUrl" type="button" style="margin-top:8px">インスタのアプリが開いてしまうときは：URLをコピー</button>
-  <p class="note" id="copyNote" hidden>コピーしました。Safariの上のアドレスバーに貼り付けて開いてください（貼り付けて開くとアプリに飛ばされません）。</p>
+  <button class="link" id="copyUrl" type="button">アプリが開いてしまうときは、URLをコピー</button>
+  <p class="note" id="copyNote" hidden>コピーしました。Safariのアドレスバーに貼り付けて開いてください。</p>
+  <div class="must">
+    <div><span>情報</span>フォロワーとフォロー だけ</div>
+    <div><span>期間</span>全期間</div>
+    <div><span>形式</span>JSON</div>
+  </div>
+  <details class="how"><summary>画面つきの手順を見る</summary>
   <ol class="guide pics">
     <li><div class="cap"><span class="tap">エクスポートを作成</span> をタップ</div>
       <div class="mock"><div class="mh">あなたの情報をエクスポート</div><div class="mtext">現在のエクスポートはありません</div><div class="mbtn hit">エクスポートを作成<i class="finger"></i></div></div></li>
@@ -285,7 +285,8 @@ footer a{color:var(--ink-soft)}
     <li><div class="cap">メールが届いたら、同じ画面の <span class="tap">ダウンロード</span> からzipを保存</div>
       <div class="mock"><div class="mh">あなたの情報をエクスポート</div><div class="mrow">Instagramのエクスポート<span class="mval ready">準備完了</span></div><div class="mbtn hit">ダウンロード<i class="finger"></i></div></div></li>
   </ol>
-  <p class="note">メールは数分〜1日ほどで届きます（Gmailだと「新着」や「プロモーション」タブに入ることがあります）。zipは解凍せず、そのままファイルアプリに保存してください。画面の文字はインスタの更新で少し変わることがあります。</p>
+  </details>
+  <p class="note">メールが届いたら（数分〜1日）、zipを解凍せずに保存します。</p>
 </section>
 
 <section class="card" id="step2">
@@ -293,11 +294,10 @@ footer a{color:var(--ink-soft)}
   <label class="drop" id="drop">
     <input type="file" id="file" accept=".zip,.json,application/zip,application/json" multiple>
     <strong>ファイルを選ぶ</strong>
-    <span>ダウンロードしたzipをそのまま選んでください</span>
   </label>
   <p class="status" id="status" role="status"></p>
   <ul class="checks" id="checks" hidden></ul>
-  <button class="btn ghost small" id="demoBtn" type="button" style="margin-top:6px">サンプルで試してみる</button>
+  <button class="link" id="demoBtn" type="button">サンプルで試してみる</button>
 </section>
 
 <section class="card plain" id="result" hidden>
@@ -310,40 +310,25 @@ footer a{color:var(--ink-soft)}
 </section>
 
 <section class="card plain" id="savedCard" hidden>
-  <div class="saved">
-    <div id="savedText"></div>
-    <button class="btn ghost small" id="clearBtn" type="button">記録を消す</button>
-  </div>
-  <p class="note">記録はこの端末のブラウザの中にだけ保存されます。外した人の履歴は、読み込むたびに追加されてずっと残ります。</p>
-  <span class="warn"><b>iPhoneのSafariでは、7日以上開かないと記録が消えることがあります。</b>共有ボタンから「ホーム画面に追加」して使うと消えにくくなります。念のため、ときどき下のボタンで記録をファイルに保存しておくと安心です。</span>
-  <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap">
-    <button class="btn ghost small" id="backupBtn" type="button">記録をファイルに保存</button>
-    <label class="btn ghost small" style="cursor:pointer">記録ファイルを読み込む<input type="file" id="restoreFile" accept=".json,application/json" hidden></label>
-  </div>
-</section>
-
-<section class="card plain" id="about">
-  <h2>おわかれ帳でわかること</h2>
-  <p class="note" style="font-size:14px;color:var(--ink)">おわかれ帳は、<b>インスタでフォローを外した人（フォロー解除された相手）</b>や、<b>フォロバされていない人</b>を確認できる無料のツールです。Instagram公式の「個人情報をダウンロード」で受け取ったzipファイルを読み込むだけで使えます。</p>
-  <ul class="note" style="font-size:14px;color:var(--ink);padding-left:1.2em;margin:8px 0 0">
-    <li>フォローを外した人：前回と比べて、いなくなったフォロワーを一覧表示</li>
-    <li>フォロバされていない人：自分はフォローしているのに、フォローを返してくれていない人</li>
-    <li>フォローされている人：フォローしてくれているのに、自分がフォロー返ししていない人</li>
-    <li>フォロワー・フォロー中の一覧と、フォローされた日付</li>
-  </ul>
-  <p class="note" style="font-size:14px;color:var(--ink)">アプリのインストールやログインは不要で、iPhone・Androidのブラウザやパソコンでも使えます。IDやパスワードを入れるフォロー解除チェックアプリと違い、アカウントが凍結されたり乗っ取られたりする心配がありません。</p>
+  <div id="savedText"></div>
+  <details class="how"><summary>記録の管理</summary>
+    <p class="note">記録はこの端末の中だけに保存されます。機種変更などに備えて、ファイルに保存しておけます。</p>
+    <div class="row-btns">
+      <button class="btn ghost small" id="backupBtn" type="button">ファイルに保存</button>
+      <label class="btn ghost small">ファイルから戻す<input type="file" id="restoreFile" accept=".json,application/json" hidden></label>
+      <button class="btn ghost small" id="clearBtn" type="button">記録を消す</button>
+    </div>
+  </details>
 </section>
 
 <section class="card plain">
   <h2>よくある質問</h2>
-  <details class="faq"><summary>パスワードは必要？</summary><p>いりません。インスタ公式の「個人情報をダウンロード」で受け取ったファイルを読むだけです。ログインもしません。</p></details>
-  <details class="faq"><summary>データはどこかに送られる？</summary><p>送られません。ファイルの読み込みも比較も、すべてあなたのブラウザの中だけで行います。</p></details>
-  <details class="faq"><summary>外した人の記録はずっと見られる？</summary><p>はい。読み込むたびに、前回からいなくなった人を「外した人」の履歴に追加していくので、過去に外した人もいつ外したか（○月○日〜○月○日のあいだ）と一緒にずっと見られます。記録はこの端末にだけ保存されるので、機種変更のときは「記録をファイルに保存」で引き継いでください。</p></details>
-  <details class="faq"><summary>初回から「外した人」はわかる？</summary><p>初回は比べる相手がないので、「フォロバされていない（相手が返してくれていない人）」と「フォローされている（自分が返していない人）」がわかります。次に新しいzipを読み込むと、前回からいなくなった人が「外した人」に出ます。</p></details>
-  <details class="faq"><summary>「外した人」に出たのに、まだフォローされてる？</summary><p>ユーザー名を変えた人や、アカウントを削除・停止した人も「外した人」に出ることがあります。気になる人は、名前をタップしてプロフィールを確認してください。</p></details>
-  <details class="faq"><summary>誰がプロフィールを見たかはわかる？</summary><p>わかりません。インスタはプロフィールを見た人の情報を公開しておらず、公式データにも含まれていません。</p></details>
-  <details class="faq"><summary>「申請画面をひらく」でインスタのアプリが開いてしまう</summary><p>インスタのアプリが入っていると、iPhoneが自動でアプリに切り替えることがあります。「URLをコピー」を押して、Safariのアドレスバーに貼り付けて開いてください。アプリが開いたときに画面の右上に出る「instagram.com ›」を押すと、次からSafariで開くようになることもあります。</p></details>
-  <details class="faq"><summary>毎回申請が必要？</summary><p>はい。インスタのデータは「申請した時点の一覧」なので、新しい状態を見るには毎回申請します。月1回くらいのチェックがおすすめです。</p></details>
+  <details class="faq"><summary>おわかれ帳ってなに？</summary><p>インスタでフォローを外した人（フォロー解除された相手）や、フォロバされていない人を確認できる無料ツールです。Instagram公式の「個人情報をダウンロード」で受け取ったzipを読み込むだけで、iPhone・Android・パソコンで使えます。読み込むたびに外した人を記録していくので、過去に外した人もずっと見られます。</p></details>
+  <details class="faq"><summary>パスワードやログインは必要？</summary><p>いりません。IDやパスワードを入れるアプリと違い、アカウントが凍結されたり乗っ取られたりする心配もありません。</p></details>
+  <details class="faq"><summary>データはどこかに送られる？</summary><p>送られません。読み込みも記録も、すべてこの端末の中だけで行います。</p></details>
+  <details class="faq"><summary>記録が消えないようにするには？</summary><p>iPhoneのSafariは、しばらく開かないサイトの保存データを消すことがあります。共有ボタンから「ホーム画面に追加」して使うと消えにくくなります。「記録の管理」からファイルに保存しておくと安心です。</p><p><label class="link" style="display:inline;margin:0">保存したファイルから記録を戻す<input type="file" id="restoreFile2" accept=".json,application/json" hidden></label></p></details>
+  <details class="faq"><summary>「外した人」に出たのに、まだフォローされてる？</summary><p>名前を変えた人や、アカウントを削除・停止した人も出ることがあります。名前をタップしてプロフィールを確認してください。</p></details>
+  <details class="faq"><summary>誰がプロフィールを見たかはわかる？</summary><p>わかりません。インスタの公式データにも含まれていません。</p></details>
 </section>
 
 <footer>
@@ -637,10 +622,10 @@ function applyHistory(res, found){
 }
 function showSaved(){
   var snaps = loadSnaps();
-  if(!snaps.length){ $("savedText").innerHTML = "まだ記録はありません。<br><span style=\"font-size:12.5px;color:var(--ink-soft)\">機種変更などで記録ファイルがある場合は、下から読み込めます。</span>"; $("savedCard").hidden = false; return; }
+  if(!snaps.length){ $("savedCard").hidden = true; return; }
   var last = snaps[snaps.length-1];
-  var log = loadLog(), first = snaps[0];
-  $("savedText").innerHTML = "前回の記録：<b>" + fmtDay(last.savedAt) + "</b>（フォロワー " + last.followers.length + "人）<br><span style=\"font-size:12.5px;color:var(--ink-soft)\">" + fmtYMD(first.savedAt) + "から記録中・外した人の履歴 " + log.filter(function(e){ return e.type === "gone"; }).length + "件</span>";
+  var log = loadLog(), first = snaps[0], g = log.filter(function(e){ return e.type === "gone"; }).length;
+  $("savedText").innerHTML = "記録：<b>" + fmtYMD(first.savedAt) + "から</b>（最新 " + fmtDay(last.savedAt) + "・外した人 " + g + "件）";
   $("savedCard").hidden = false;
 }
 
@@ -740,7 +725,7 @@ $("backupBtn").addEventListener("click", function(){
   document.body.appendChild(a); a.click(); setTimeout(function(){ URL.revokeObjectURL(a.href); a.remove(); }, 1000);
   setStatus("記録ファイル（" + name + "）を保存しました。ファイルアプリに残しておいてください。");
 });
-$("restoreFile").addEventListener("change", function(e){
+function onRestore(e){
   var f = e.target.files && e.target.files[0]; e.target.value = "";
   if(!f) return;
   f.text().then(function(t){
@@ -755,13 +740,16 @@ $("restoreFile").addEventListener("change", function(e){
     saveLog(ml);
     showSaved(); setStatus("記録ファイルを読み込みました。次にzipを読み込むと、これまでの履歴もあわせて表示されます。");
   }).catch(function(){ setStatus("<b>記録ファイルを読み込めませんでした。</b>「記録をファイルに保存」で作ったファイルを選んでください。", true); });
-});
+}
+$("restoreFile").addEventListener("change", onRestore);
+$("restoreFile2").addEventListener("change", onRestore);
 $("clearBtn").addEventListener("click", function(){
   if(!confirm("保存した記録（前回の一覧と、外した人の履歴）をすべて消しますか？")) return;
   try{ localStorage.removeItem(STORE_KEY); localStorage.removeItem(LOG_KEY); }catch(e){}
   showSaved(); setStatus("記録を消しました。");
 });
 showSaved();
+try{ if(navigator.storage && navigator.storage.persist) navigator.storage.persist(); }catch(e){}
 })();
 </script>
 </body>
